@@ -2,38 +2,43 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Nhóm Trẻ Linh Nhi</title>
+  <title>Danh sách bài đăng – Nhóm Trẻ Linh Nhi</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🌼 Nhóm Trẻ Linh Nhi</h1>
-    <p>Hiển thị bài đăng mới nhất từ giáo viên</p>
+    <h1>📚 Danh sách bài đăng từ giáo viên</h1>
+    <p>Thông tin mới nhất dành cho phụ huynh và học sinh</p>
   </header>
 
-  <div class="post" id="post">
-    <p>Đang tải nội dung...</p>
-  </div>
+  <div id="posts">Đang tải nội dung...</div>
 
-  <a href="edit.html" class="edit-button">📝 Chỉnh sửa nội dung</a>
+  <a href="edit.html" class="edit-button">📝 Đăng bài mới</a>
 
   <script>
     fetch('https://raw.githubusercontent.com/mamnonlinhnhi/nhatre/main/data.json')
       .then(res => res.json())
       .then(data => {
+        const container = document.getElementById('posts');
+        container.innerHTML = ''; // Xóa dòng "Đang tải..."
+
         if (Array.isArray(data) && data.length > 0) {
-          const post = data[0];
-          document.getElementById('post').innerHTML = `
-            <h2>${post.title}</h2>
-            <p>${post.text}</p>
-            ${post.image ? `<img src="${post.image}" alt="Hình minh họa">` : ''}
-          `;
+          data.forEach((post, index) => {
+            const block = document.createElement('div');
+            block.className = 'post';
+            block.innerHTML = `
+              <h2>Bài ${index + 1}: ${post.title}</h2>
+              <p>${post.text}</p>
+              ${post.image ? `<img src="${post.image}" alt="Hình minh họa">` : ''}
+            `;
+            container.appendChild(block);
+          });
         } else {
-          document.getElementById('post').innerHTML = '<p>Chưa có bài đăng nào.</p>';
+          container.innerHTML = '<p>Chưa có bài đăng nào.</p>';
         }
       })
       .catch(err => {
-        document.getElementById('post').innerHTML = '<p>❌ Không thể tải nội dung.</p>';
+        document.getElementById('posts').innerHTML = '<p>❌ Không thể tải nội dung.</p>';
         console.error(err);
       });
   </script>
