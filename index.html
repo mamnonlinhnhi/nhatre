@@ -2,33 +2,81 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang chính</title>
+  <title>Trang chính – Nhóm Trẻ Linh Nhi</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #0077cc;
+    }
+    .post {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+    .edit-button {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .edit-button:hover {
+      background-color: #005fa3;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🌼 Trường Mầm Non Linh Nhi – Nhóm Trẻ</h1>
+    <h1>🌼 Nhóm Trẻ Linh Nhi</h1>
+    <p>Hiển thị bài đăng mới nhất từ giáo viên</p>
   </header>
 
-  <main>
-    <div id="content">Đang tải nội dung...</div>
-    <a href="edit.html">
-      <button>📝 Chỉnh sửa nội dung</button>
-    </a>
-  </main>
+  <div class="post" id="post">
+    <p>Đang tải nội dung...</p>
+  </div>
+
+  <a href="edit.html" class="edit-button">📝 Chỉnh sửa nội dung</a>
 
   <script>
     fetch('https://raw.githubusercontent.com/mamnonlinhnhi/nhatre/main/data.json')
       .then(res => res.json())
       .then(data => {
-        document.getElementById('content').innerHTML = `
-          <h2>${data.title}</h2>
-          <p>${data.text}</p>
-          <img src="${data.image}" alt="Hình minh họa" style="max-width:100%; border-radius:8px;">
-        `;
+        if (Array.isArray(data) && data.length > 0) {
+          const post = data[0]; // Lấy bài mới nhất
+          document.getElementById('post').innerHTML = `
+            <h2>${post.title}</h2>
+            <p>${post.text}</p>
+            ${post.image ? `<img src="${post.image}" alt="Hình minh họa">` : ''}
+          `;
+        } else {
+          document.getElementById('post').innerHTML = '<p>Chưa có bài đăng nào.</p>';
+        }
       })
       .catch(err => {
-        document.getElementById('content').innerText = 'Không thể tải nội dung.';
+        document.getElementById('post').innerHTML = '<p>❌ Không thể tải nội dung.</p>';
         console.error(err);
       });
   </script>
