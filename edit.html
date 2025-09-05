@@ -3,31 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Chỉnh sửa bài đăng</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-    input, textarea {
-      width: 100%;
-      margin-bottom: 12px;
-      padding: 8px;
-      font-size: 16px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-    #status {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>📝 Đăng bài mới</h2>
+  <header>
+    <h1>📝 Đăng bài mới</h1>
+  </header>
 
   <input type="text" id="title" placeholder="Tiêu đề bài viết">
   <textarea id="text" rows="5" placeholder="Nội dung bài viết"></textarea>
@@ -56,20 +37,16 @@
       const newPost = { title, text, image };
 
       try {
-        // Lấy nội dung hiện tại của data.json
         const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
         const sha = data.sha;
         const existingContent = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-        
-        // Thêm bài mới vào đầu danh sách
         existingContent.unshift(newPost);
 
         const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(existingContent, null, 2))));
 
-        // Gửi PUT để cập nhật file
         const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
           method: 'PUT',
           headers: {
