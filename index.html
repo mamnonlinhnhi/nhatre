@@ -2,45 +2,100 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Danh sách bài đăng – Mầm Non Linh Nhi</title>
+  <title>Trung Tâm Lớp Học – Linh Nhi</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e6f7ff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #0077cc;
+      margin-bottom: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .menu-box {
+      background-color: #fff;
+      border: 2px solid #0077cc;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .menu-box:hover {
+      transform: scale(1.05);
+      background-color: #f0faff;
+    }
+
+    .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🌼 Trường Mầm Non Linh Nhi</h1>
-    <p>Thông tin mới nhất dành cho phụ huynh và học sinh</p>
-  </header>
+  <h1>🌸 TRUNG TÂM LỚP HỌC</h1>
+  <p>Tên lớp: Mầm Non Linh Nhi</p>
 
-  <div id="posts">Đang tải nội dung...</div>
+  <div class="grid">
+    <a href="chuongtrinh.html" class="menu-box">
+      <div class="icon">📅</div>
+      <div class="title">Chương trình hôm nay</div>
+    </a>
 
-  <a href="edit.html" class="edit-button">📝 Đăng bài mới</a>
+    <a href="tintuc.html" class="menu-box">
+      <div class="icon">📰</div>
+      <div class="title">Tin tức lớp học</div>
+    </a>
 
-  <script>
-    fetch('https://raw.githubusercontent.com/mamnonlinhnhi/nhatre/main/data.json')
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('posts');
-        container.innerHTML = ''; // Xóa dòng "Đang tải..."
+    <a href="noiquy.html" class="menu-box">
+      <div class="icon">📋</div>
+      <div class="title">Nội quy lớp học</div>
+    </a>
 
-        if (Array.isArray(data) && data.length > 0) {
-          data.forEach((post, index) => {
-            const block = document.createElement('div');
-            block.className = 'post';
-            block.innerHTML = `
-              <h2>Bài ${index + 1}: ${post.title}</h2>
-              <p>${post.text}</p>
-              ${post.image ? `<img src="${post.image}" alt="Hình minh họa">` : ''}
-            `;
-            container.appendChild(block);
-          });
-        } else {
-          container.innerHTML = '<p>Chưa có bài đăng nào.</p>';
-        }
-      })
-      .catch(err => {
-        document.getElementById('posts').innerHTML = '<p>❌ Không thể tải nội dung.</p>';
-        console.error(err);
-      });
-  </script>
+    <a href="hocsinh.html" class="menu-box">
+      <div class="icon">🏅</div>
+      <div class="title">Học sinh của tuần</div>
+    </a>
+
+    <a href="lich.html" class="menu-box">
+      <div class="icon">🗓️</div>
+      <div class="title">Lịch lớp học</div>
+    </a>
+
+    <a href="tailieu.html" class="menu-box">
+      <div class="icon">📚</div>
+      <div class="title">Tài liệu cho phụ huynh</div>
+    </a>
+
+    <a href="giaovien.html" class="menu-box">
+      <div class="icon">👩‍🏫</div>
+      <div class="title">Gặp gỡ giáo viên</div>
+    </a>
+
+    <a href="tainguyen.html" class="menu-box">
+      <div class="icon">🧩</div>
+      <div class="title">Tài nguyên lớp học</div>
+    </a>
+  </div>
 </body>
 </html>
