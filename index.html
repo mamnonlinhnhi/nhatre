@@ -7,14 +7,30 @@
 </head>
 <body>
   <header>
-    <h1>Chào mừng đến với trang của Mầm Non Linh Nhi</h1>
+    <h1>🌼 Trường Mầm Non Linh Nhi – Nhóm Trẻ</h1>
   </header>
 
   <main>
-    <p>Đây là nội dung hiển thị. Bạn có thể chỉnh sửa nó bằng cách nhấn nút bên dưới.</p>
+    <div id="content">Đang tải nội dung...</div>
     <a href="edit.html">
       <button>📝 Chỉnh sửa nội dung</button>
     </a>
   </main>
+
+  <script>
+    fetch('https://raw.githubusercontent.com/mamnonlinhnhi/nhatre/main/data.json')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('content').innerHTML = `
+          <h2>${data.title}</h2>
+          <p>${data.text}</p>
+          <img src="${data.image}" alt="Hình minh họa" style="max-width:100%; border-radius:8px;">
+        `;
+      })
+      .catch(err => {
+        document.getElementById('content').innerText = 'Không thể tải nội dung.';
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
