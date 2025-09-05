@@ -2,51 +2,8 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Trang chính – Nhóm Trẻ Linh Nhi</title>
+  <title>Nhóm Trẻ Linh Nhi</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f8ff;
-      padding: 20px;
-      max-width: 700px;
-      margin: auto;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    h1 {
-      color: #0077cc;
-    }
-    .post {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    img {
-      max-width: 100%;
-      border-radius: 6px;
-      margin-top: 15px;
-    }
-    .edit-button {
-      display: block;
-      margin: 30px auto 0;
-      padding: 10px 20px;
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      text-decoration: none;
-      text-align: center;
-    }
-    .edit-button:hover {
-      background-color: #005fa3;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -65,7 +22,7 @@
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          const post = data[0]; // Lấy bài mới nhất
+          const post = data[0];
           document.getElementById('post').innerHTML = `
             <h2>${post.title}</h2>
             <p>${post.text}</p>
