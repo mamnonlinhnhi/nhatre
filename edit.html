@@ -2,53 +2,96 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Chỉnh sửa nội dung</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Chỉnh sửa bài đăng</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>📝 Chỉnh sửa nội dung hiển thị</h1>
-  </header>
+  <h2>📝 Đăng bài mới</h2>
 
-  <main>
-    <input type="text" id="title" placeholder="Tiêu đề bài viết"><br><br>
-    <textarea id="text" rows="6" placeholder="Nội dung bài viết"></textarea><br><br>
-    <input type="text" id="image" placeholder="URL hình ảnh"><br><br>
-    <button onclick="saveData()">💾 Đăng bài</button>
-    <p id="status"></p>
-  </main>
+  <input type="text" id="title" placeholder="Tiêu đề bài viết">
+  <textarea id="text" rows="5" placeholder="Nội dung bài viết"></textarea>
+  <input type="text" id="image" placeholder="URL hình ảnh (nếu có)">
+  <input type="password" id="token" placeholder="Nhập GitHub Token của bạn">
+  <button onclick="savePost()">💾 Lưu bài đăng</button>
+
+  <p id="status"></p>
 
   <script>
-    async function saveData() {
-      const title = document.getElementById('title').value;
-      const text = document.getElementById('text').value;
-      const image = document.getElementById('image').value;
+    const repo = 'mamnonlinhnhi/nhatre';
+    const filePath = 'data.json';
 
-      const content = {
-        title: title,
-        text: text,
-        image: image
-      };
+    async function savePost() {
+      const title = document.getElementById('title').value.trim();
+      const text = document.getElementById('text').value.trim();
+      const image = document.getElementById('image').value.trim();
+      const token = document.getElementById('token').value.trim();
+      const status = document.getElementById('status');
 
-      const jsonContent = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
+      if (!title || !text || !token) {
+        status.innerText = '❗ Vui lòng nhập đầy đủ tiêu đề, nội dung và token.';
+        return;
+      }
 
-      const response = await fetch('https://api.github.com/repos/mamnonlinhnhi/nhatre/contents/data.json', {
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: 'Cập nhật nội dung từ edit.html',
-          content: jsonContent,
-          sha: '' // cần lấy SHA nếu file đã tồn tại
-        })
-      });
+      const newPost = { title, text, image };
 
-      if (response.ok) {
-        document.getElementById('status').innerText = '✅ Đã đăng bài thành công!';
-      } else {
-        document.getElementById('status').innerText = '❌ Lỗi khi đăng bài.';
+      try {
+        // Lấy nội dung hiện tại của data.json
+        const res = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const sha = data.sha;
+        const existingContent = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+        
+        // Thêm bài mới vào đầu danh sách
+        existingContent.unshift(newPost);
+
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(existingContent, null, 2))));
+
+        // Gửi PUT để cập nhật file
+        const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Thêm bài đăng mới: ${title}`,
+            content: updatedContent,
+            sha: sha
+          })
+        });
+
+        if (updateRes.ok) {
+          status.innerText = '✅ Bài đăng đã được lưu thành công!';
+        } else {
+          status.innerText = '❌ Lỗi khi lưu bài đăng.';
+          console.error(await updateRes.json());
+        }
+      } catch (err) {
+        status.innerText = '❌ Không thể đọc hoặc ghi file data.json.';
+        console.error(err);
       }
     }
   </script>
