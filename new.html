@@ -7,23 +7,34 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #f0f0f0;
       text-align: center;
     }
-    .container {
-      padding-top: 100px;
+
+    /* Logo ở góc trái trên cùng */
+    .logo-container {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
     }
-    .logo {
-      width: 120px;
-      margin-bottom: 30px;
+
+    .logo-container img {
+      width: 50px;
+      height: auto;
       cursor: pointer;
     }
+
+    .content {
+      padding-top: 150px;
+    }
+
     h1 {
       font-size: 48px;
       color: #333;
     }
+
     p {
       font-size: 20px;
       color: #666;
@@ -31,11 +42,14 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Logo dẫn về index.html -->
+  <!-- Logo dẫn về index.html -->
+  <div class="logo-container">
     <a href="index.html">
-      <img src="logo.jpg" alt="Logo" class="logo">
+      <img src="logo.jpg" alt="Logo">
     </a>
+  </div>
+
+  <div class="content">
     <h1>Sắp ra mắt</h1>
     <p>Trang web đang được hoàn thiện. Quay lại sau nhé!</p>
   </div>
